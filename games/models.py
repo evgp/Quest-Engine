@@ -4,17 +4,19 @@ from django.contrib.auth.models import Group, User
 # Create your models here.
 
 class Game(models.Model):
-    sequence = models.IntegerField(verbose_name="Game number", default=0)
+    sequence = models.IntegerField(verbose_name="Game number", default=0, unique=True)
     title = models.CharField(max_length=255, null=False)
     authors = models.ManyToManyField(User)
     players = models.ManyToManyField(Group, blank=True)
     start_time = models.DateTimeField(null=True)
+    # the place the game related to (i.e. city name)
+    place = models.CharField(max_length=255, null=True, blank=True)
     # game_type 
     def __str__(self):
         return 'Game #' + ' ' + str(self.sequence) + ' ' + self.title
 
 class Level(models.Model):
-    sequence = models.IntegerField(verbose_name="Level number", default=0)
+    sequence = models.IntegerField(verbose_name="Level number", default=1)
     title = models.CharField(max_length=255, null=False)
     game = models.ForeignKey('Game',on_delete=models.CASCADE)
     duration = models.DurationField(verbose_name="Level duration", null=True) # A field for storing periods of time - modeled in Python by timedelta.
