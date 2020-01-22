@@ -21,7 +21,8 @@ class Command(BaseCommand):
             # game start time 1 day ahead
             new_game.start_time = timezone.now() + datetime.timedelta(1)
             new_game.save()
-            new_game.authors.add(i)
+            new_game.authors.add(i+1)
+            new_game.authors.add(5)
             new_game.save()
             self.stdout.write(self.style.SUCCESS(new_game.title + ' created'))
             i += 1
