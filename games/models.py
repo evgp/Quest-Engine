@@ -23,13 +23,15 @@ class Level(models.Model):
     level_next = models.OneToOneField('self', blank=True, null=True, on_delete=models.CASCADE, related_name="previous")
     level_parent = models.OneToOneField('self', blank=True, null=True, on_delete=models.CASCADE, related_name="child")
     LEVEL_TYPES = (
-        ("Standart", "Standart level"),
-        ("Required", "Required child level to complete standart level"),
+        ("Standart", "Standart level"),            # has no parent, must be completed to go further (level.next)
+        ("Required", "Required child level to complete standart level"), # has a parent and must be completed to complete "Parent level"
         ("Timeout", "Timeout level for waiting in a line"),
-        ("Null", "Null"),
+        ("Bonus", "Bonus level"), # has a parent, but not required to be completed
     )
-    level_types = models.CharField(max_length=255, choices=LEVEL_TYPES)
-
+    level_type = models.CharField(max_length=255, choices=LEVEL_TYPES)
+    # MANAGERS:
+    # 1. create different types of levels
+    # 
     def __str__(self):
         return self.title
 
@@ -48,6 +50,7 @@ class Register(models.Model):
     code_input = models.CharField(max_length=255, null=False)
     timestamp = models.DateTimeField(verbose_name="Timestamp", auto_now=True)
     match = models.BooleanField(verbose_name="Input matchet the code", null=True)
+    level_start = models.BooleanField(verbose_name="Level started", null=True)    
     level_complete = models.BooleanField(verbose_name="Level completed", null=True)
     checkpoint = models.BinaryField(verbose_name="Checkpoint data", blank=True, null=True)
 
