@@ -1,7 +1,12 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import Group, User
 
-# Create your models here.
+# doesn't work without custom manager
+# class GameQuerySet(models.QuerySet):
+#     def upcoming(self):
+#         now = timezone.now()
+#         return self.filter(start_time__gte=now)
 
 class Game(models.Model):
     sequence = models.IntegerField(verbose_name="Game number", default=0, unique=True)
@@ -13,8 +18,8 @@ class Game(models.Model):
     # the place the game related to (i.e. city name)
     place = models.CharField(max_length=255, null=True, blank=True)
     # game_type 
-    def __str__(self):
-        return 'Game #' + ' ' + str(self.sequence) + ' ' + self.title
+    # def __str__(self):
+    #     return 'Game #' + ' ' + str(self.sequence) + ' ' + self.title
 
 class Level(models.Model):
     sequence = models.IntegerField(verbose_name="Level number", default=1)
